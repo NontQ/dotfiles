@@ -1,0 +1,174 @@
+version: '3'
+
+# Define variables
+vars:
+  DOTFILES_DIR: '{{.HOME}}/dotfiles'
+  BACKUP_DIR: '{{.HOME}}/dotfiles_backup'
+
+tasks:
+  setup:
+    desc: "Setup the environment by installing dependencies and running the setup script"
+    cmds:
+      - task: install-prerequisites
+      - task: install-deps
+      - task: apply-dotfiles
+      - task: configure-git
+      - task: setup-fish
+      - task: make-scripts-executable
+      - task: set-motd
+      - echo "Setup completed successfully!"
+
+  update:
+    desc: "Update configurations by pulling the latest changes and applying them"
+    cmds:
+      - git pull origin main
+      - task: apply-dotfiles
+      - task: update-homebrew
+      - task: update-fish-plugins
+      - task: update-vim-plugins
+      - task: update-k9s-skins
+      - echo "Update completed successfully!"
+
+  clean:
+    desc: "Clean up broken symlinks and remove old plugin directories"
+    cmds:
+      - find -L $HOME -type l -delete
+      - rm -rf $HOME/.vim/plugged/*
+      - rm -rf $HOME/.config/fish/functions/*
+      - echo "Clean up completed successfully!"
+
+  install-prerequisites:
+    desc: "Install prerequisites (Homebrew, Git, chezmoi)"
+    cmds:
+      - task: install-homebrew
+      - task: install-git
+      - task: install-chezmoi
+
+  install-deps:
+    desc: "Install essential dependencies, including Homebrew and packages listed in the Brewfile"
+    cmds:
+      - brew bundle --file=$DOTFILES_DIR/Brewfile
+
+  install-homebrew:
+    desc: "Install Homebrew if not already installed"
+    cmds:
+      - |
+        if ! command -v brew &> /dev/null; then
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        fi
+
+  install-git:
+    desc: "Install Git if not already installed"
+    cmds:
+      - |
+        if ! command -v git &> /dev/null; then
+          brew install git
+        fi
+
+  install-chezmoi:
+    desc: "Install chezmoi if not already installed"
+    cmds:
+      - |
+        if ! command -v chezmoi &> /dev/null; then
+          brew install chezmoi
+        fi
+
+  update-homebrew:
+    desc: "Update Homebrew and installed packages"
+    cmds:
+      - brew update
+      - brew upgrade
+      - brew cleanup
+
+  update-fish-plugins:
+    desc: "Update Fish plugins using Fisher"
+    cmds:
+      - fish -c 'fisher update'
+
+  update-vim-plugins:
+    desc: "Update Vim plugins using vim-plug"
+    cmds:
+      - vim +PlugUpdate +qall
+
+  update-k9s-skins:
+    desc: "Update k9s skins by running the update_k9s_skins.sh script"
+    cmds:
+      - ./scripts/update_k9s_skins.sh
+
+  configure-git:
+    desc: "Configure Git settings"
+    cmds:
+      - git config --global user.name "{{.GITHUB_USER}}"
+      - git config --global user.email "{{.GITHUB_EMAIL}}"
+      - git config --global credential.helper "cache --timeout=3600"
+
+  make-scripts-executable:
+    desc: "Make all scripts in the scripts directory executable"
+    cmds:
+      - chmod +x $DOTFILES_DIR/scripts/*.sh
+
+  apply-dotfiles:
+    desc: "Apply dotfiles using chezmoi"
+    cmds:
+      - chezmoi apply
+
+  setup-fish:
+    desc: "Set up Fish shell"
+    cmds:
+      - fish -c 'set -U fish_user_paths $fish_user_paths /usr/local/bin'
+      - fish -c 'fisher install jorgebucaran/fisher'
+      - fish -c 'fisher install $FISH_PLUGINS'
+
+  set-motd:
+    desc: "Set the Message of the Day (MOTD)"
+    cmds:
+      - sudo cp $DOTFILES_DIR/motd/* /etc/update-motd.d/
+
+  backup:
+    desc: "Backup dotfiles to the backup directory"
+    cmds:
+      - mkdir -p $BACKUP_DIR
+      - |
+        declare -a FILES=(
+          ".bashrc"
+          ".vimrc"
+          ".tmux.conf"
+          ".config/fish/config.fish"
+          ".zshrc"
+        )
+        for FILE in "${FILES[@]}"; do
+          if [ -f "$HOME/$FILE" ] || [ -d "$HOME/$FILE" ]; then
+            cp -r "$HOME/$FILE" "$BACKUP_DIR/"
+            echo "Backed up $FILE to $BACKUP_DIR"
+          else
+            echo "File $FILE does not exist, skipping..."
+          fi
+        done
+      - echo "Backup completed successfully!"
+
+  restore:
+    desc: "Restore dotfiles from the backup directory"
+    cmds:
+      - |
+        declare -a FILES=(
+          ".bashrc"
+          ".vimrc"
+          ".tmux.conf"
+          ".config/fish/config.fish"
+          ".zshrc"
+        )
+        for FILE in "${FILES[@]}"; do
+          if [ -f "$BACKUP_DIR/$FILE" ] || [ -d "$BACKUP_DIR/$FILE" ]; then
+            cp -r "$BACKUP_DIR/$FILE" "$HOME/"
+            echo "Restored $FILE from $BACKUP_DIR"
+          else
+            echo "Backup for $FILE does not exist, skipping..."
+          fi
+        done
+      - echo "Restore completed successfully!"
+
+  help:
+    desc: "Display the list of available tasks"
+    cmds:
+      - task --list

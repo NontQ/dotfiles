@@ -1,0 +1,80 @@
+k9s:
+  # Skin settings
+  skin: default
+# skin: dracula
+# skin: catppuccin-mocha
+# skin: catppuccin-macchiato
+# skin: catppuccin-frappe
+# skin: catppuccin-latte
+# ...or the transparent variants:
+# skin: catppuccin-mocha-transparent
+# skin: catppuccin-macchiato-transparent
+# skin: catppuccin-frappe-transparent
+# skin: catppuccin-latte-transparent
+# ...or the transparent variants:
+# General settings
+  liveViewAutoRefresh: false
+  screenDumpDir: /home/.local/state/k9s/screen-dumps
+  refreshRate: 2
+  maxConnRetry: 5
+  readOnly: false
+  noExitOnCtrlC: false
+
+  # UI settings
+  ui:
+    enableMouse: false
+    headless: false
+    logoless: false
+    crumbsless: false
+    reactive: false
+    noIcons: false
+    defaultsToFullScreen: false
+    theme: "dracula"  # Set a theme for better visibility
+
+  # Skip latest version check
+  skipLatestRevCheck: false
+
+  # Disable pod counting
+  disablePodCounting: false
+
+  # Shell pod settings
+  shellPod:
+    image: busybox:1.35.0
+    namespace: default
+    limits:
+      cpu: 100m
+      memory: 100Mi
+
+  # Image scan settings
+  imageScans:
+    enable: false
+    exclusions:
+      namespaces: []
+      labels: {}
+
+  # Logger settings
+  logger:
+    tail: 100
+    buffer: 5000
+    sinceSeconds: -1
+    textWrap: false
+    showTime: false
+    showNamespace: true  # Show namespace in logs for better context
+
+  # Resource thresholds
+  thresholds:
+    cpu:
+      critical: 90
+      warn: 70
+    memory:
+      critical: 90
+      warn: 70
+
+  # Plugin settings (optional)
+  plugins:
+    # Example plugin configuration
+    # - name: example
+    #   shortCut: e
+    #   scopes:
+    #     - po
+    #   command: "echo 'Hello from plugin!'"

@@ -1,0 +1,80 @@
+plugin:
+  shortcut: "ctrl-a"
+  description: "Open K9s plugin manager"
+  scopes:
+    - all
+  command: "k9s plugin"
+  background: false
+
+plugins:
+  - name: "kubectl"
+    shortcut: "ctrl-k"
+    description: "Run kubectl commands"
+    scopes:
+      - all
+    command: "kubectl"
+    background: false
+
+  - name: "logs"
+    shortcut: "ctrl-l"
+    description: "View logs of a pod"
+    scopes:
+      - pod
+    command: "kubectl logs -f $NAME"
+    background: false
+
+  - name: "describe"
+    shortcut: "ctrl-d"
+    description: "Describe a resource"
+    scopes:
+      - all
+    command: "kubectl describe $KIND $NAME"
+    background: false
+
+  - name: "port-forward"
+    shortcut: "ctrl-p"
+    description: "Port forward a pod"
+    scopes:
+      - pod
+    command: "kubectl port-forward $NAME 8080:80"
+    background: false
+
+  - name: "exec"
+    shortcut: "ctrl-e"
+    description: "Execute a command in a pod"
+    scopes:
+      - pod
+    command: "kubectl exec -it $NAME -- /bin/sh"
+    background: false
+
+  - name: "get"
+    shortcut: "ctrl-g"
+    description: "Get resources"
+    scopes:
+      - all
+    command: "kubectl get $KIND"
+    background: false
+
+  - name: "delete"
+    shortcut: "ctrl-x"
+    description: "Delete a resource"
+    scopes:
+      - all
+    command: "kubectl delete $KIND $NAME"
+    background: false
+
+  - name: "top"
+    shortcut: "ctrl-t"
+    description: "Display resource (CPU/memory) usage"
+    scopes:
+      - all
+    command: "kubectl top $KIND"
+    background: false
+
+  - name: "scale"
+    shortcut: "ctrl-s"
+    description: "Scale a deployment"
+    scopes:
+      - deployment
+    command: "kubectl scale deployment $NAME --replicas=3"
+    background: false

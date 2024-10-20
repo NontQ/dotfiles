@@ -1,0 +1,30 @@
+[user]
+	name = nontq
+	email = nontq@protonmail.com
+
+[core]
+    editor = nano
+    excludesfile = ~/.gitignore_global
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    df = diff
+    lg = log --oneline --graph --decorate --all
+
+[merge]
+    tool = vimdiff
+
+[diff]
+    tool = vimdiff
+
+[push]
+    default = simple
+
+[color]
+    ui = auto
+
+[credential]
+    helper = cache --timeout=3600

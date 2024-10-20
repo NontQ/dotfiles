@@ -1,0 +1,152 @@
+# Global Ignore File
+# ------------------
+
+# Environment Configuration
+config.env
+config.env.example
+
+# Compiled Source Files
+# ---------------------
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages
+# --------
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and Databases
+# ------------------
+*.log
+*.sql
+*.sqlite
+
+# OS Generated Files
+# ------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.AppleDouble
+.LSOverride
+Desktop.ini
+$RECYCLE.BIN/
+*~
+.nfs*
+
+# IDEs and Editors
+# ----------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# Python
+# ------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node.js
+# -------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ruby
+# ----
+*.gem
+*.rbc
+.bundle/
+.config/
+coverage/
+InstalledFiles
+pkg/
+spec/reports/
+test/tmp/
+test/version_tmp/
+tmp/
+
+# Go
+# --
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Rust
+# ----
+*.rlib
+target/
+
+# Java
+# ----
+*.class
+*.jar
+*.war
+*.ear
+*.classpath
+*.project
+*.settings/
+*.factorypath
+
+# Ansible
+# -------
+*.retry
+
+# Docker
+# ------
+*.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Terraform
+# ---------
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+override.tf
+override.tf.json
+terraform.tfvars
+terraform.tfvars.json
+*.tfvars
+*.tfvars.json
+
+# Kubernetes
+# ----------
+*.kube/config
+
+# Miscellaneous
+# -------------
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*.rej
